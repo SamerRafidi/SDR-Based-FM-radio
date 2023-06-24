@@ -187,20 +187,20 @@ int main(int argc, char* argv[])
 	  stereo_left_channel.resize(stereo_filt.size(), 0);
 		stereo_right_channel.resize(stereo_filt.size(), 0);
 //------------------------------mono delay------------------------------------------------------------------
-		delay_data.resize(processed_data.size(),0.0);
-		for(int i =0; i < (int)delay_state.size();i++)
+		delay_data.resize(processed_data.size(),0.0);    // Resize the vector to match the size of processed_data
+		for(int i =0; i < (int)delay_state.size();i++)   //
 		{
 			delay_data[i] = delay_state[i];
-			delay_state[i] = processed_data[processed_data.size() - delay_state.size() + i];
+			delay_state[i] = processed_data[processed_data.size() - delay_state.size() + i];   // Shift the contets of delay_state by 1
 		}
-		for(int j =delay_state.size(); j < (int)delay_data.size();j++)
+		for(int j =delay_state.size(); j < (int)delay_data.size();j++)   // Copy remaining values into delay_data
 		{
 			delay_data[j] = processed_data[j-delay_state.size()];
 		}
 //-------------------------------stereo mixer-----------------------------------------------------------------
-		std::vector<float> both;
+		std::vector<float> both;  // Create a vector called both. This is used to store the mixed data
 		for (int i=0;i<stereo_right_channel.size();i++){
-			both.push_back((delay_data[i] + stereo_filt[i])/2);
+			both.push_back((delay_data[i] + stereo_filt[i])/2);  // Mix the samples from delay_data and stereo_filt and store it in the vector
 			both.push_back((delay_data[i] - stereo_filt[i])/2);
 		}
 //----------------------------------Processing finished, write data--------------------------------------------------------------
